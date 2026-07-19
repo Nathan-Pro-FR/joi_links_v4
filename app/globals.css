@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #07070a;
+  --bg-grad-1: rgba(47, 224, 198, 0.07);
+  --bg-grad-2: rgba(120, 90, 200, 0.06);
+  --panel: rgba(255, 255, 255, 0.045);
+  --panel-2: rgba(255, 255, 255, 0.07);
+  --glass-brd: rgba(255, 255, 255, 0.1);
+  --glass-brd-2: rgba(255, 255, 255, 0.16);
+  --ink: rgba(255, 255, 255, 0.94);
+  --ink-2: rgba(255, 255, 255, 0.62);
+  --ink-3: rgba(255, 255, 255, 0.4);
+  --accent: #2fe0c6;
+  --accent-dim: rgba(47, 224, 198, 0.16);
+  --accent-brd: rgba(47, 224, 198, 0.42);
+  --blur: 22px;
+  --radius: 18px;
+  --font: "Hanken Grotesk", -apple-system, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(90% 70% at 8% 0%, var(--bg-grad-1), transparent 60%),
+    radial-gradient(80% 80% at 100% 100%, var(--bg-grad-2), transparent 55%),
+    oklch(0.16 0.012 270);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--accent-dim);
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+.joi-glass {
+  background: var(--panel);
+  backdrop-filter: blur(var(--blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(1.4);
+  border: 1px solid var(--glass-brd);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px -20px rgba(0, 0, 0, 0.7);
+}
+
+.joi-hl {
+  position: relative;
+}
+.joi-hl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 40%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.joi-card-hover {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s;
+}
+.joi-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 30px 60px -28px rgba(0, 0, 0, 0.85),
+    0 0 0 1px var(--glass-brd-2);
+}
+
+.joi-chip {
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  cursor: pointer;
+}
+
+.joi-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.joi-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+.joi-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+input.joi-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14.5px;
+  width: 100%;
+}
+input.joi-input::placeholder {
+  color: var(--ink-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---- Responsive ---- */
+
+/* Drawer toggle / close button: only shown on narrow screens. */
+.joi-mobile-only {
+  display: none !important;
+}
+
+/* Roomy desktop grid steps down before the drawer kicks in. */
+@media (max-width: 1240px) {
+  .joi-grid-main {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .joi-shell {
+    padding: 12px !important;
+  }
+  /* Sidebar becomes an off-canvas drawer. */
+  .joi-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100dvh !important;
+    width: 284px !important;
+    max-width: 84vw !important;
+    border-radius: 0 20px 20px 0 !important;
+    z-index: 90;
+    transform: translateX(-108%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .joi-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .joi-mobile-only {
+    display: inline-flex !important;
+  }
+  .joi-grid-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Backdrop behind the open drawer (rendered only while open). */
+.joi-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: rgba(4, 4, 7, 0.55);
+  backdrop-filter: blur(3px);
+}
+@media (min-width: 981px) {
+  .joi-nav-backdrop {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .joi-grid-main {
+    /* minmax(0, 1fr) — NOT bare `1fr` (== minmax(auto,1fr)), whose content-based
+       min lets a card grow past the viewport and cause horizontal overflow. */
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* Low-priority topbar extras collapse first. */
+  .joi-hide-sm {
+    display: none !important;
+  }
+  .joi-modal-overlay {
+    padding: 12px !important;
+  }
+}
